@@ -1,6 +1,16 @@
 language: cpp
 compiler: gcc
 
+install:
+  # fparser
+  - cd ..
+  - git clone https://github.com/thliebig/fparser.git
+  - cd fparser
+  - qmake
+  - make
+  - cd ..
+  - cd travis_qmake_gcc_cpp98_fparser 
+
 script: 
   - qmake
   - make
