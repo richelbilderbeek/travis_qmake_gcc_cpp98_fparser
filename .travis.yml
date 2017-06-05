@@ -8,6 +8,7 @@ install:
   - cd fparser
   - qmake
   - make
+  - sudo make install
   - cd ..
   - cd travis_qmake_gcc_cpp98_fparser 
 
