@@ -1,10 +1,22 @@
-#include "fparser.hh"
 #include <iostream>
+#include <string>
+#include <sstream>
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+#include "fparser.hh"
+#pragma GCC diagnostic pop
+
+//Convert string to double
+double stod(const std::string& s)
+{
+  return std::atof(s.c_str());
+}
 
 int main(int argc, char* argv[])
 {
   const std::string my_function = argc < 2 ? "sin(x)" : argv[1];
-  const double x = argc < 3 ? 0.5 : std::stod(argv[2]);
+  const double x = argc < 3 ? 0.5 : stod(argv[2]);
 
   FunctionParser f;
   f.Parse(my_function.c_str(),"x");
