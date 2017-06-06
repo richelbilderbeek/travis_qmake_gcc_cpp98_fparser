@@ -1,38 +1,45 @@
-#include "fparser.hh"
+#include <cstdlib>
 #include <iostream>
+#include <string>
+#include <sstream>
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+#include "fparser.hh"
+#pragma GCC diagnostic pop
+
+//Convert string to double
+double stod(const std::string& s)
+{
+  return std::atof(s.c_str());
+}
 
 int main(int argc, char* argv[])
 {
+  const std::string my_function = argc < 2 ? "sin(x)" : argv[1];
+  const double x = argc < 3 ? 0.5 : stod(argv[2]);
 
-  //Parse the formula
-  std::string my_function{ui->edit_function->text().toStdString()};
-
+  FunctionParser f;
   f.Parse(my_function.c_str(),"x");
   if (f.GetParseErrorType() != FunctionParser::FP_NO_ERROR)
   {
-    ui->label_result->setText("Function could not be parsed");
-    return;
-  }
-
-  //Check if x can be converted to double
-  try
-  {
-    boost::lexical_cast<double>(ui->edit_value->text().toStdString());
-  }
-  catch (boost::bad_lexical_cast&)
-  {
-    ui->label_result->setText("Value of x is not a valid double");
-    return;
+    std::cerr << "Function could not be parsed\n";
+    return 1;
   }
 
   //Evaluate the parsed formula
-  const double x = boost::lexical_cast<double>(ui->edit_value->text().toStdString());
   const double xs[1] = { x };
   const double y = f.Eval(xs);
 
   if (f.EvalError()!=0)
   {
-    ui->label_result->setText("Function could not be evaluated");
-    return;
+    std::cerr << "Function could not be evaluated\n";
+    return 1;
   }
+
+  std::cout
+    << "f: " << my_function << '\n'
+    << "x: " << x << '\n'
+    << "f(x): " << y << '\n'
+  ;
 }
